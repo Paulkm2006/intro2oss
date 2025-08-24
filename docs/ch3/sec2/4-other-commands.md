@@ -1,18 +1,32 @@
+# 一些常用的 Linux 工具
+
 !!! note "主要作者"
 
     [@Paulkm2006](https://github.com/Paulkm2006)
 
-## 一些常用的 Linux 工具
+## 目的
 
-### 目的
 让使用 Linux 变得像使用 Windows 一样简单！
 
 本文只是作为一些常用工具的常用方法的介绍。有很多工具都具有更加高级的使用方法，因篇幅限制无法在本文中展开描述。若对某一个工具感兴趣，最简单的办法就是阅读他的 man 手册。同时，[runoob 网站](https://www.runoob.com/linux/linux-command-manual.html)也覆盖了很多本文没有提及的工具。
 
-### 编写格式
+## 快速开始（新手建议）
+
+如果你是第一次接触 Linux，建议按以下顺序阅读内容，逐步掌握基础工具的使用：
+
+1. 先学习如何查阅命令的用法，掌握基本帮助命令的使用方法（可参见第 0 节“如何查看命令的帮助”）。
+2. 再了解如何查看和关闭进程，熟悉任务管理相关操作（可参见第 1 节“任务管理器系列”）。
+3. 接着学习如何查看磁盘、CPU、USB 等硬件资源的使用情况（详见第 2 节“资源管理器系列”）。
+4. 最后学习查看和编辑文件内容、搜索关键词等基本文件操作（请参考第 3 节“文本和文件操作类”）。
+
+建议配合实际操作边学边练，更容易理解和记忆。
+
+## 编写格式
+
 很多工具都可以接受一些可选参数和开关。但同时，也有部分应用要求一些输入才能运行。在本文中，通常用如下的格式来描述命令
 `command [optional_parameters] required_input`
 其中：
+
 - `[optional_parameters]` 为可选的输入
 - `required_input` 为必须的开关和输入
 
@@ -21,10 +35,13 @@
 !!! warning
     请注意！Linux 系统是大小写敏感的！若执行命令时出现了错误的结果或提示无法识别参数，请检查一下自己的大小写是否正确。
 
+!!! note
+    什么是“终端”或“命令行”？  
+    简单理解，它是一个可以输入命令并看到执行结果的窗口。在 Ubuntu 中你可以使用 Ctrl+Alt+T 打开它。也叫 shell 或终端窗口。
 
-### 内容
+## 内容
 
-#### 0. 如何查看命令的帮助
+### 0. 如何查看命令的帮助
 
 Linux 中的命令数不胜数。很显然，一下子把他们的用法和命令全部记住是一件不现实的事情。
 那么有什么能帮助我们在忘记用法的时候快速查看命令的帮助呢？当然有！他的名字是 man（manual 的缩写）
@@ -42,14 +59,13 @@ man 可以被称为 Linux 系统的百科全书。从命令使用到操作系统
 
 别慌！一般来说，作为用户的我们是不需要记住这些编号的。如果你想查看一个东西的文档，最简单的办法就是直接运行`man name`。man 会自动找到含有这个条目的章节并展示给你。
 
-
 !!! note
       一般来说，我们无需指定章节号。但是对于某些可能存在于多个章节的条目（比如`printf`既是一个位于章节 1 的工具，也是一个位于章节 3 的 API 函数），要想跳到其他章节，这个编号就是必须的。此时，命令的结构为 `man [section] name`
 
 !!! info
     对于绝大部分人类来说，man pages 的文档还是有些过于晦涩了。别担心！我们可以使用一个叫`tldr`的开源工具来阅读更加实用、通俗易懂的说明。关于这个工具的详情，请参考下一节的“[常用的开源工具](../sec3/1-useful-oss.md)”篇目。
 
-#### 1. 任务管理器系列
+### 1. 任务管理器系列
 
 在 Windows 中，我们可以很方便的使用任务管理器（taskmgr）实时查看后台及前台的程序列表，监视其资源占用，并强制结束掉一些无响应/不愿意自己退出的程序。
 在 Linux 中，同样有很多可以实现相同功能的命令，这里选择以下几个介绍：
@@ -79,13 +95,20 @@ man 可以被称为 Linux 系统的百科全书。从命令使用到操作系统
     当指定`-u <username>`时，会显示指定用户的进程
 
     在 top 运行时输入`k`，会跳转到结束进程的会话，此时输入进程 pid 和信号代码即可结束。
-    
+
     top 是一个相对底层（也更加难以使用）的工具。虽然它可以展示绝大多数的系统状态信息，但是这些信息过于杂乱，不是很适合人类阅读。这就引出了下一个要介绍的工具
 
     !!! tip
         如果你出于某些原因只能使用 top，那么可以在启动 top 后输入命令`xtm4z`，以获得一个相对友好的界面
-    
 
+    在 top 中常见字段说明：
+
+    `PID`：进程 ID  
+    `USER`：所属用户  
+    `%CPU`：CPU 使用率  
+    `%MEM`：内存使用率  
+    `TIME+`：累计使用的 CPU 时间  
+    `COMMAND`：命令名  
 
 - **htop**
 
@@ -99,10 +122,24 @@ man 可以被称为 Linux 系统的百科全书。从命令使用到操作系统
         是的，“按钮”是可以使用鼠标点击的——事实上，类似于 htop 这样的可以使用鼠标操作的命令行程序有个专门的名字，tui（terminal ui）
 
     htop 的功能非常丰富。除了可以对进程进行筛选、排序外，我们还能直接向一个进程发送中断。
-    
+
     选中你想操作的进程（使用方向键或直接用鼠标点击），按`F9`，最左边会出现一长串以`SIG`开头的命令。一般来说，我们保持默认的`SIGTERM`即可。但是，如果一个程序不回应我们的`SIGTERM`，我们也可以使用更加强制的`SIGKILL`强制结束它。
-    
+
     如果向了解更多有关 Linux 中各个信号的意义，可以参考[这篇文章](https://prateeksrivastav598.medium.com/understanding-Linux-signals-a-comprehensive-guide-339ecc2d16d4)
+
+    !!! warning
+        如果系统提示找不到 `htop` 命令，可以使用以下命令安装（根据你的系统选择）：
+
+        ```bash
+        # Debian/Ubuntu
+        sudo apt install htop
+
+        # CentOS/RHEL
+        sudo yum install htop
+
+        # Arch Linux
+        sudo pacman -S htop
+        ```
 
 - **kill killall 和 pkill**
 
@@ -113,6 +150,11 @@ man 可以被称为 Linux 系统的百科全书。从命令使用到操作系统
     用法：`kill [flags] pid`
 
     当指定`-s <signal>`时，会使用指定的信号结束进程。否则默认为`15 SIGTERM`
+
+    选中你想操作的进程（使用方向键或直接用鼠标点击），按`F9`，最左边会出现一长串以`SIG`开头的命令：
+
+    `SIGTERM` (15)：**安全终止**，允许进程清理后退出（推荐首选）
+    `SIGKILL` (9)：**强制终止**，立即结束进程（用于无响应进程）
 
     killall 工具用于根据进程名称结束进程。注意若有多个进程拥有相同的名字，killall 将会杀死所有同名的进程。
 
@@ -126,9 +168,8 @@ man 可以被称为 Linux 系统的百科全书。从命令使用到操作系统
 
     当指定`-x`时，pkill 只会结束名称**完全匹配**的进程
 
+### 2. 资源管理器系列
 
-
-#### 2. 资源管理器系列
 Windows 里，我们可以使用设备管理器（devmgmt.msc）、磁盘管理器（diskmgmt.msc）和系统控制面板查看系统中内存、磁盘和外接设备的状态。
 同理，Linux 也包含很多实用程序，帮你管理系统的各种资源
 
@@ -171,14 +212,17 @@ Windows 里，我们可以使用设备管理器（devmgmt.msc）、磁盘管理�
     注意，wsl 环境中不存在这两个命令
 
 - **/proc 目录**
+!!! tip "什么是/proc?"
+    Linux中`/proc`是**虚拟文件系统**，不占用磁盘空间，实时反映系统状态
+    你可以像查看普通文件一样查看这些特殊文件
 
     是的，这是一个目录，而并非一个工具。Linux 遵循“万物皆文件”的原则，故我们也可以从一个个“文件”中读取到相应的系统信息。
 
     以下几个文件是比较常用的
 
-    - `/proc/cpuinfo`: 显示 CPU 信息
-    - `/proc/meminfo`: 显示内存信息
-    - `/proc/swaps`: 显示交换分区信息 [何为 swap？](https://docs.redhat.com/en/documentation/red_hat_enterprise_Linux/7/html/storage_administration_guide/ch-swapspace#ch-swapspace)
+  - `/proc/cpuinfo`: 显示 CPU 信息
+  - `/proc/meminfo`: 显示内存信息
+  - `/proc/swaps`: 显示交换分区信息 [何为 swap？](https://docs.redhat.com/en/documentation/red_hat_enterprise_Linux/7/html/storage_administration_guide/ch-swapspace#ch-swapspace)
 
     通常，我们使用`cat`命令查看这些文件
 
@@ -199,17 +243,16 @@ Windows 里，我们可以使用设备管理器（devmgmt.msc）、磁盘管理�
     如果你想要一个酷炫的工具来展示你的配置信息，那不妨试试`neofetch`或者`inxi`。这两个工具并非系统自带，所以你需要使用包管理器安装一下。
     ![neofetch示例](../../assets/neofetch.png)
 
-
-#### 3. 文本和文件操作类
+### 3. 文本和文件操作类
 
 - **cat**
-  
+
     cat 命令用于将一个文件的内容输出到标准输出（stdout，也就是命令行里显示的东西）。
 
     用法：`cat [options] [filename]`
 
     当指定`-n`时，cat 将会为输出加上行号
-    
+
     若未指定`filename`，cat 将会重定向标准输入（stdin，也就是你输入命令行的东西）到标准输出。具体来说，他会变成一个复读机，显示任何你输入的内容。
 
 - **grep**
@@ -229,13 +272,13 @@ Windows 里，我们可以使用设备管理器（devmgmt.msc）、磁盘管理�
     当没有指定`file`时，grep 将从命令管道中读取数据并进行查找。有关管道的使用和定义，请参考本章的上一篇目。
 
     当`file`为一个目录且指定`-r`时，grep 将遍历该目录下所有文件。
-    
+
     可以毫不夸张的说，grep 是 Linux shell 中绝大多数应用必不可少的帮助工具。例如，我们常用 grep 和 cat 筛选并列出日志中感兴趣的条目，或使用 grep 和 ps 查找一个进程的 pid。
 
 - **nano，vi 和 vim**
 
     这三个工具都是 Linux 环境下的文本编辑器。
-    
+
     对于初学者（但是并不局限于初学者）来说，nano 是其中最友好也最方便的一个。
 
     用法：`nano [options] filename`
@@ -244,25 +287,31 @@ Windows 里，我们可以使用设备管理器（devmgmt.msc）、磁盘管理�
 
     nano 的界面非常友好，可以进行的操作一目了然。以下几个快捷键是比较常用的：
 
-    - `Ctrl+X` 退出
-    - `Ctrl+O` 保存
-    - `Ctrl+W pattern` 查找
-    - `Ctrl+\ pattern replace` 替换
-    - `Ctrl+/ n` 跳转到第 n 行
+  - `Ctrl+X` 退出
+  - `Ctrl+O` 保存
+  - `Ctrl+W pattern` 查找
+  - `Ctrl+\ pattern replace` 替换
+  - `Ctrl+/ n` 跳转到第 n 行
 
     vi 和 vim 是有悠久历史的 Linux 文件编辑器。它们的操作方式比较复杂，但是对于熟练掌握的用户来说非常方便。本文在此对其高级用法不过多的赘述，若感兴趣可以阅读[Vim Cheat Sheet](https://vim.rtorr.com/)
 
     用法：`vi/vim filename`
 
-    打开文件后，按下`i`按钮以进入互动编辑器模式（允许我们移动光标）
+    打开文件后：
 
-    编辑完成后，按下`ESC`以退出互动模式
+    1. 按下 `i` 进入**编辑模式**（底部显示 `-- INSERT --`）
+    2. 编辑完成后按 `ESC` 返回**命令模式**
+    3. 在命令模式下输入：
+        - `:w` 保存
+        - `:q` 退出
+        - `:wq` 保存并退出
+        - `:q!` 强制退出不保存（注意是英文感叹号）
 
-    退出编辑模式后，使用命令`:q!`退出（`!`意味着强制退出，并不保存修改），`:wq`退出并保存
-    
+    !!! tip
+        若编辑时卡住，连续按 `ESC` 确保返回命令模式再输入指令。
+
     !!! info
         多数系统自带的 vim 都是`vim-tiny`而非完整的`vim`。若你在更改他的配置时发现了一些不对劲的地方，可以试试安装完整版的 vim。
-
 
 - **more 和 less**
 
@@ -280,10 +329,23 @@ Windows 里，我们可以使用设备管理器（devmgmt.msc）、磁盘管理�
 
     在进入了分页界面后，我们可以使用以下命令操作
 
-    - `Enter` 向下一行
-    - `Down/Up` 注意，在 more 中这两个按键的作用是向下/上一页，而在 less 中是向下/上一行 
-    - `q` 退出
-    - `h` 查看帮助信息
+  - `Enter` 向下一行
+  - `Down/Up` 注意，在 more 中这两个按键的作用是向下/上一页，而在 less 中是向下/上一行
+  - `q` 退出
+  - `h` 查看帮助信息
+
+!!! example
+    你可以使用 `cat` 命令输出内容并通过管道 `|` 传给 `less` 实现分页：
+
+    ```bash
+    cat largefile.txt | less
+    ```
+
+    或直接打开文件：
+
+    ```bash
+    less largefile.txt
+    ```
 
 - **tail**
 
@@ -328,9 +390,7 @@ Windows 里，我们可以使用设备管理器（devmgmt.msc）、磁盘管理�
     !!! tip
         我们可以使用`vimdiff`工具进行可视化、交互的文件对比
 
-
-
-#### 4. 网络操作类
+### 4. 网络操作类
 
 - **wget 和 curl**
 
@@ -354,6 +414,26 @@ Windows 里，我们可以使用设备管理器（devmgmt.msc）、磁盘管理�
 
     当指定`-d <data>`时，将会把`data`的数据作为请求体发送。特别的，`data`中可以指定`@filename`，此时将会上传文件
 
+    **常用场景示例：**
+
+    ```bash
+    # 下载文件并重命名
+    wget -O logo.png https://example.com/image.png
+    
+    # 快速测试 API（JSON 格式美化）
+    curl -s https://api.example.com/data | jq  
+    
+    # 带身份验证的请求
+    curl -u user:password https://api.example.com
+    ```
+
+| 功能           | wget                         | curl                            |
+|----------------|------------------------------|----------------------------------|
+| 默认行为       | 下载文件                      | 显示网页内容或发起请求           |
+| 支持协议       | HTTP, HTTPS, FTP             | 支持协议更多（HTTP, FTP, SMTP 等）|
+| 文件上传       | 不支持                       | 支持（`-d` 或 `--upload-file`） |
+| 是否默认安装   | 多数系统已内置               | 多数系统已内置                   |
+
 - **ftp**
 
     ftp 用于从或向服务器传输文件。注意！`ftp`，`ftps`，`sftp`是三个不同的协议！`ftps`是加密的`ftp`协议，而`sftp`是基于`ssh`协议传输。
@@ -372,7 +452,7 @@ Windows 里，我们可以使用设备管理器（devmgmt.msc）、磁盘管理�
 
     当指定`-p <port>`时，ssh 将通过`port`连接
 
-    当指定`-i <filename>`时，使用`filename`指定的私钥进行鉴权。若没有指定这个选项，ssh 默认使用位于` ~/.ssh/id_{rsa,ecdsa,ed25519}`的文件中的密钥
+    当指定`-i <filename>`时，使用`filename`指定的私钥进行鉴权。若没有指定这个选项，ssh 默认使用位于`~/.ssh/id_{rsa,ecdsa,ed25519}`的文件中的密钥
 
     当指定`-L <[bind_address:]port:host:hostport>`时，将会把远程服务器上`host:hostport`的端口转发到本机`bind_address:port`上
 
@@ -398,11 +478,11 @@ Windows 里，我们可以使用设备管理器（devmgmt.msc）、磁盘管理�
 
     当指定`object`为`link`，会输出网络端口的状态信息
 
-#### 5. 杂项
+### 5. 杂项
 
 - **压缩与解压缩**
 
-    - `.tar.*`文件
+  - `.tar.*`文件
 
       初次使用 Linux 下的压缩文件时，你会发现很多文件的后缀都有两个部分。这是因为，`tar`是一种文件**归档**格式，作用是将多个文件、目录集中到一个文件中；`xz`，`gz`和`bz2`等是**压缩**格式，用于减小归档文件的体积。
 
@@ -418,7 +498,7 @@ Windows 里，我们可以使用设备管理器（devmgmt.msc）、磁盘管理�
 
       `tar czvf archive.tar.gz file1 file2 dir1 ...` 将`file1`，`dir1`等文件和目录归档并压缩到`archive.tar.gz`文件中
 
-    - `7z`和`rar`
+  - `7z`和`rar`
 
       这两种文件的压缩与解压需要使用工具`p7zip`。这个工具在多数系统中并不会被自动安装，所以需要你使用包管理器安装一下。
 
@@ -431,7 +511,7 @@ Windows 里，我们可以使用设备管理器（devmgmt.msc）、磁盘管理�
 
       当指定`-k`时，将会保留被压缩的文件或原压缩包。
 
-    - `zip`
+  - `zip`
 
       zip 文件是日常生活中最常见的压缩格式。在 Linux 中，我们可以选择使用`p7zip`或`unzip`与`zip`来操作。`p7zip`的使用方法参考上一条
 
@@ -449,12 +529,21 @@ Windows 里，我们可以使用设备管理器（devmgmt.msc）、磁盘管理�
 
     当指定`-e`，该命令会使用你的默认文本编辑器打开一个配置文件。这个配置文件的详细格式可以参考[这篇文章](https://linux.fasionchan.com/zh_CN/latest/administration/service/cron/crontab-conf.html)
 
-    !!! example
-        `* */1 * * * command`，每小时执行一次 command
-        
-        `* 9 */2 * * command`，每两天的早上 9 点执行一次 command
+    **时间格式图解：**
 
-    当指定`-l`，会显示当前配置的定时任务
+    ```bash
+    ┌── 分钟 (0-59)
+    │ ┌── 小时 (0-23)
+    │ │ ┌── 日 (1-31)
+    │ │ │ ┌── 月 (1-12)
+    │ │ │ │ ┌── 星期 (0-7, 0 和 7=周日)
+    │ │ │ │ │
+    * * * * * command
+    ```
+
+    !!! example "示例"
+        `0 9 * * 1-5 command` → 每周一到周五 9:00 执行  
+        `*/10 * * * * command` → 每 10 分钟执行
 
 - **服务**
 
@@ -467,7 +556,8 @@ Windows 里，我们可以使用设备管理器（devmgmt.msc）、磁盘管理�
     用法：`systemctl verb [options] [object]`
 
     其中，verb 可以是以下这几个。注意除特殊说明外，object 均是**必须包含**的参数
-    ```
+
+    ```bash
     - start 启动
     - stop 停止
     - enable 设置开机启动。若同时附带`--now`参数相当于同时执行`start`
@@ -481,39 +571,58 @@ Windows 里，我们可以使用设备管理器（devmgmt.msc）、磁盘管理�
 
     !!! note
         严格意义上来说，`systemd`其实是一整套工具，能够让我们管理 Linux 系统的方方面面。
-
     !!! warning
         对于 Alpine Linux 用户：Alpine 发行版使用的并不是`systemd`而是`OpenRC`。若需要了解更多信息，请参考[Alpine wiki](https://wiki.alpinelinux.org/wiki/Writing_Init_Scripts)
 
-
-
 - **nohup 与 screen**
-
     在 ssh 会话结束后，我们运行的所有前台应用都将会被销毁。若需要将会话长时间保持后台运行，我们可以使用 nohup 或 screen 工具
-
     nohup 的作用是让应用不受 ssh 会话终止的影响，继续在后台运行。
-
     用法：`nohup [command]`
-    
+
     通常，我们使用指令`nohup command > log.log 2>&1 &`，意义为：在后台运行`command`，将其的标准错误输出（`stderr`）合并到标准输出，并重定向到文件`log.log`，并让终端继续接受后续命令
+
+    **基础用法：**
+
+    ```bash
+    # 后台运行脚本并忽略关闭信号
+    nohup python myscript.py &
     
+    # 查看实时输出
+    tail -f nohup.out
+    ```
+
     screen 的作用是相当于一个虚拟终端。我们可以随时切换回到这个终端，或从这个终端分离。分离后，其将继续在后台运行
-
     用法：`screen [options] [command]`
-
     当指定`-ls`时，会显示所有运行的 screen 会话
-
     当指定`-d`时，会以分离的模式运行这个会话
-
     当指定`-S <name>`时，会将会话命名为`name`，方便后续管理
-
     当指定`-r <id/name>`时，会切换到相应终端
-
     当指定`-XS <id/name> <command>`时，会在对于会话中执行命令
-
     若想从终端中分离，可以同时按下`Ctrl+A+D`按键
-
     若想结束一个终端，可以执行`screen -XS <session-id> quit`
-
     !!! note
-        screen 工具由于维护不佳，导致出现了[许多漏洞](https://security.opensuse.org/2025/05/12/screen-security-issues.html)。在可能的情况下，我们更加推荐使用 tmux。关于这个工具的详情，请参考下一节的“[常用的开源工具](../sec3/1-useful-oss.md)”篇目。
+        screen 工具由于维护不佳，导致出现了[许多漏洞](https://security.opensuse.org/2025/05/12/screen-security-issues.html)。在可能的情况下，我们更加推荐使用 tmux。关于这个工具的详情，请参考下一节的“[常用的开源工具](../sec3/1-useful-oss.md)”篇目
+
+## 🧪 小练习
+
+1. 用 `ps aux` 命令查看所有进程，并使用 `grep` 查找包含关键词 "ssh" 的进程。
+2. 使用 `top` 命令，观察当前哪个进程占用 CPU 最高。
+3. 使用 `kill` 命令终止某个你启动的测试进程（比如 `gedit`）。
+4. 尝试用 `ss -tunlp` 查看当前系统监听的端口。
+
+## 小贴士
+
+- 想更深入学习这些工具？推荐查看 [https://explainshell.com](https://explainshell.com)
+- 遇到不会用的命令？试试 `man <命令>` 或 `<命令> --help`
+- 多实践！Linux 学习最好的方式是——动手敲命令
+
+## 附录：推荐安装的常用工具（适合新手）
+
+| 工具      | 作用简述                     | 安装命令（Ubuntu/Debian）       |
+|-----------|------------------------------|----------------------------------|
+| tldr      | 简洁版 man 手册              | `sudo apt install tldr`         |
+| htop      | 图形化任务管理器              | `sudo apt install htop`         |
+| neofetch  | 显示系统信息图               | `sudo apt install neofetch`     |
+| inxi      | 全面展示硬件/系统信息         | `sudo apt install inxi`         |
+| unzip     | 解压 zip 文件                 | `sudo apt install unzip`        |
+| p7zip     | 解压 7z 文件（完整功能）      | `sudo apt install p7zip-full`   |
